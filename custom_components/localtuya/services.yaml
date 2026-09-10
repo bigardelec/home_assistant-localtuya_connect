@@ -1,0 +1,15 @@
+reload:
+  description: Recharge LocalTuya Connect et reconnecte tous les appareils.
+
+set_dp:
+  description: Modifie la valeur d'un point de données (DP).
+  fields:
+    device_id:
+      description: ID de l'appareil dont la valeur du point de données doit être modifiée.
+      example: 11100118278aab4de001
+    dp:
+      description: Numéro du point de données (DP).
+      example: 1
+    value:
+      description: Nouvelle valeur à appliquer.
+      example: false

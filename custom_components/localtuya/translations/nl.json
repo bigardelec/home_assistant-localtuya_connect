@@ -1,0 +1,673 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Het apparaat is al geconfigureerd.",
+      "device_updated": "De apparaatconfiguratie is bijgewerkt!",
+      "device_success": "Apparaat {dev_name} is succesvol {action}.",
+      "no_entities": "Niet alle entiteiten van een apparaat kunnen worden verwijderd.\nAls u een apparaat wilt verwijderen, opent u het via Apparaten, klikt u op de drie puntjes in het vak ‘Apparaatinformatie’ en kiest u Verwijderen."
+    },
+    "error": {
+      "authentication_failed": "Authenticatie mislukt.\n{msg}",
+      "cannot_connect": "Kan geen verbinding maken met het apparaat. Controleer het adres en probeer het opnieuw.",
+      "device_list_failed": "Aanmelden is gelukt, maar de Tuya-apparaatlijst kon niet worden geladen: {msg}",
+      "invalid_auth": "Authenticatie bij het apparaat is mislukt. Controleer de apparaat-ID en lokale sleutel.",
+      "unknown": "Er is een onbekende fout opgetreden. Bekijk het logboek voor details.",
+      "entity_already_configured": "Er is al een entiteit met deze ID geconfigureerd.",
+      "address_in_use": "Het adres voor detectie is al in gebruik. Controleer of geen andere toepassing dit gebruikt (TCP-poort 6668).",
+      "discovery_failed": "Er is iets misgegaan tijdens het detecteren van apparaten. Bekijk het logboek voor details.",
+      "empty_dps": "De verbinding met het apparaat is gelukt, maar er zijn geen datapunten gevonden. Probeer het opnieuw. Maak een issue aan en voeg debuglogboeken toe als het probleem blijft bestaan.",
+      "qr_login_error": "Kan Tuya QR-aanmelding niet starten ({code}): {msg}",
+      "qr_not_confirmed": "De aanmelding is niet bevestigd of de QR-code is verlopen ({code}): {msg}"
+    },
+    "step": {
+      "user": {
+        "title": "Smart Life / Tuya Smart-aanmelding",
+        "description": "Voer de gebruikerscode uit de Smart Life- of Tuya Smart-app in. U vindt deze onder Instellingen > Account en beveiliging > Gebruikerscode. Er is geen Tuya Developer-account nodig.",
+        "data": {
+          "user_code": "Gebruikerscode"
+        }
+      },
+      "scan": {
+        "title": "Scannen met Smart Life / Tuya Smart",
+        "description": "Scan de QR-code met Smart Life of Tuya Smart (+ > Scannen), bevestig de aanmelding in de app en klik daarna hier op Verzenden.",
+        "data": {
+          "QR": "QR-code"
+        }
+      },
+      "power_outlet": {
+        "title": "Subschakelaar toevoegen",
+        "description": "U gaat subschakelaar nummer `{number}` toevoegen. Schakel `Nog een schakelaar toevoegen` in als u daarna nog een wilt toevoegen.",
+        "data": {
+          "id": "ID",
+          "name": "Naam",
+          "friendly_name": "Weergavenaam",
+          "current": "Stroom",
+          "current_consumption": "Huidig verbruik",
+          "voltage": "Spanning",
+          "add_another_switch": "Nog een schakelaar toevoegen"
+        }
+      },
+      "yaml_import": {
+        "title": "Niet ondersteund",
+        "description": "Opties kunnen niet worden bewerkt wanneer de configuratie via YAML is uitgevoerd."
+      },
+      "init": {
+        "title": "LocalTuya Connect-configuratie",
+        "description": "Selecteer de gewenste actie.",
+        "data": {
+          "add_device": "Nieuw apparaat toevoegen",
+          "edit_device": "Apparaat bewerken",
+          "setup_cloud": "Cloud API-account opnieuw configureren",
+          "action": "Actie"
+        }
+      },
+      "add_device": {
+        "title": "Nieuw apparaat toevoegen",
+        "description": "Kies een Tuya-apparaat. Als LAN-detectie geen adres heeft gevonden, kunt u het IP-adres in het volgende scherm invoeren. Kies `...` om handmatig een apparaat toe te voegen.",
+        "data": {
+          "selected_device": "Gedetecteerde apparaten"
+        }
+      },
+      "edit_device": {
+        "title": "Apparaat bewerken",
+        "description": "Kies het geconfigureerde apparaat dat u wilt bewerken.",
+        "data": {
+          "selected_device": "Geconfigureerde apparaten",
+          "max_temperature_const": "Constante maximumtemperatuur (optioneel)",
+          "min_temperature_const": "Constante minimumtemperatuur (optioneel)",
+          "hvac_fan_mode_dp": "DP voor HVAC-ventilatormodus (optioneel)",
+          "hvac_fan_mode_set": "Waarden voor HVAC-ventilatormodus (optioneel)",
+          "hvac_swing_mode_dp": "DP voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_swing_mode_set": "Waarden voor HVAC-oscillatiemodus (optioneel)"
+        }
+      },
+      "cloud_setup": {
+        "title": "Cloud API-accountconfiguratie",
+        "description": "Voer de aanmeldgegevens voor de Tuya Cloud API in.",
+        "data": {
+          "region": "API-serverregio",
+          "client_id": "Client-ID",
+          "client_secret": "Geheim",
+          "user_id": "Gebruikers-ID",
+          "user_name": "Gebruikersnaam",
+          "no_cloud": "Geen Cloud API-account configureren"
+        }
+      },
+      "configure_device": {
+        "title": "Tuya-apparaat configureren",
+        "description": "Vul de apparaatgegevens in{for_device}.",
+        "data": {
+          "friendly_name": "Naam",
+          "host": "IP-adres",
+          "device_id": "Apparaat-ID",
+          "local_key": "Lokale sleutel",
+          "protocol_version": "Protocolversie",
+          "enable_debug": "Debugging voor dit apparaat inschakelen (debugging moet ook in configuration.yaml zijn ingeschakeld)",
+          "scan_interval": "Scaninterval (seconden, alleen wanneer niet automatisch wordt bijgewerkt)",
+          "entities": "Entiteiten (vink een entiteit uit om deze te verwijderen)",
+          "add_entities": "Meer entiteiten toevoegen in de modus ‘apparaat bewerken’",
+          "manual_dps_strings": "Handmatig toe te voegen DPS (gescheiden door komma's), te gebruiken wanneer detectie niet werkt (optioneel)",
+          "reset_dpids": "DPID's voor de RESET-opdracht (gescheiden door komma's), te gebruiken als het apparaat na inschakelen niet op statusverzoeken reageert (optioneel)",
+          "auto_configure_entities": "Bekende entiteiten automatisch configureren op basis van Tuya-metadata"
+        }
+      },
+      "pick_entity_type": {
+        "title": "Entiteitstype selecteren",
+        "description": "Kies het type entiteit dat u wilt toevoegen.",
+        "data": {
+          "platform_to_add": "Platform",
+          "no_additional_entities": "Geen entiteiten meer toevoegen"
+        }
+      },
+      "configure_entity": {
+        "title": "Entiteit configureren",
+        "description": "Vul de gegevens in voor {entity} van type `{platform}`. Alle instellingen behalve `ID` kunnen later via Opties worden gewijzigd.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Weergavenaam",
+          "current": "Stroom",
+          "current_consumption": "Huidig verbruik",
+          "voltage": "Spanning",
+          "commands_set": "Opdrachtenset Openen_Sluiten_Stoppen",
+          "positioning_mode": "Positioneringsmodus",
+          "current_position_dp": "Huidige positie (alleen modus *positie*)",
+          "set_position_dp": "Positie instellen (alleen modus *positie*)",
+          "position_inverted": "Positie 0–100 omkeren (alleen modus *positie*)",
+          "span_time": "Volledige openingstijd in seconden (alleen modus *tijdgestuurd*)",
+          "unit_of_measurement": "Meeteenheid",
+          "device_class": "Apparaatklasse",
+          "scaling": "Schaalfactor",
+          "state_on": "Aan-waarde",
+          "state_off": "Uit-waarde",
+          "powergo_dp": "Voedings-DP (meestal 25 of 2)",
+          "idle_status_value": "Inactieve statussen (door komma's gescheiden)",
+          "returning_status_value": "Terugkeerstatus",
+          "docked_status_value": "Dockstatussen (door komma's gescheiden)",
+          "fault_dp": "Fout-DP (meestal 11)",
+          "battery_dp": "Batterijstatus-DP (meestal 14)",
+          "mode_dp": "Modus-DP (meestal 27)",
+          "modes": "Moduslijst",
+          "return_mode": "Terugkeermodus",
+          "fan_speed_dp": "Ventilatorsnelheid-DP (meestal 30)",
+          "fan_speeds": "Lijst met ventilatorsnelheden (door komma's gescheiden)",
+          "clean_time_dp": "Reinigingstijd-DP (meestal 33)",
+          "clean_area_dp": "Reinigingsoppervlak-DP (meestal 32)",
+          "clean_record_dp": "Reinigingsgeschiedenis-DP (meestal 34)",
+          "locate_dp": "Lokaliseer-DP (meestal 31)",
+          "paused_state": "Pauzestatus (pause, paused enz.)",
+          "stop_status": "Stopstatus",
+          "brightness": "Helderheid (alleen wit)",
+          "brightness_lower": "Minimale helderheid",
+          "brightness_upper": "Maximale helderheid",
+          "color_temp": "Kleurtemperatuur",
+          "color_temp_reverse": "Kleurtemperatuur omkeren",
+          "color": "Kleur",
+          "color_mode": "Kleurmodus",
+          "color_temp_min_kelvin": "Minimale kleurtemperatuur in K",
+          "color_temp_max_kelvin": "Maximale kleurtemperatuur in K",
+          "music_mode": "Muziekmodus beschikbaar",
+          "scene": "Scène",
+          "select_options": "Geldige waarden, gescheiden door ;",
+          "select_options_friendly": "Leesbare labels, gescheiden door ;",
+          "fan_speed_control": "DP voor ventilatorsnelheid",
+          "fan_oscillating_control": "DP voor ventilatoroscillatie",
+          "fan_speed_min": "Minimale ventilatorsnelheid",
+          "fan_speed_max": "Maximale ventilatorsnelheid",
+          "fan_speed_ordered_list": "Geordende lijst met ventilatorsnelheden (vervangt min./max.)",
+          "fan_direction": "DP voor ventilatorrichting",
+          "fan_direction_forward": "DP-waarde voor voorwaartse richting",
+          "fan_direction_reverse": "DP-waarde voor omgekeerde richting",
+          "fan_dps_type": "DP-waardetype",
+          "current_temperature_dp": "Huidige temperatuur",
+          "target_temperature_dp": "Doeltemperatuur",
+          "temperature_step": "Temperatuurstap (optioneel)",
+          "max_temperature_dp": "DP voor maximumtemperatuur (optioneel)",
+          "min_temperature_dp": "DP voor minimumtemperatuur (optioneel)",
+          "max_temperature_const": "Constante maximumtemperatuur (optioneel)",
+          "min_temperature_const": "Constante minimumtemperatuur (optioneel)",
+          "precision": "Precisie (optioneel, voor DP-waarden)",
+          "target_precision": "Doelprecisie (optioneel, voor DP-waarden)",
+          "temperature_unit": "Temperatuureenheid (optioneel)",
+          "hvac_mode_dp": "DP voor HVAC-modus (optioneel)",
+          "hvac_mode_set": "Waarden voor HVAC-modus (optioneel)",
+          "hvac_fan_mode_dp": "DP voor HVAC-ventilatormodus (optioneel)",
+          "hvac_fan_mode_set": "Waarden voor HVAC-ventilatormodus (optioneel)",
+          "hvac_swing_mode_dp": "DP voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_swing_mode_set": "Waarden voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_action_dp": "DP voor huidige HVAC-actie (optioneel)",
+          "hvac_action_set": "Waarden voor huidige HVAC-actie (optioneel)",
+          "preset_dp": "DP voor voorinstellingen (optioneel)",
+          "preset_set": "Lijst met voorinstellingen (optioneel)",
+          "eco_dp": "Eco-DP (optioneel)",
+          "eco_value": "Eco-waarde (optioneel)",
+          "heuristic_action": "Heuristische actiedetectie inschakelen (optioneel)",
+          "dps_default_value": "Standaardwaarde vóór initialisatie (optioneel)",
+          "restore_on_reconnect": "De laatst ingestelde waarde in Home Assistant herstellen na opnieuw verbinden",
+          "min_value": "Minimumwaarde",
+          "max_value": "Maximumwaarde",
+          "step_size": "Minimale stapgrootte",
+          "is_passive_entity": "Passieve entiteit – de integratie moet een initialisatiewaarde verzenden"
+        }
+      },
+      "entity": {
+        "title": "Entiteitsconfiguratie",
+        "description": "De entiteit met DP `{id}` en platform `{platform}` bewerken.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Weergavenaam",
+          "current": "Stroom",
+          "current_consumption": "Huidig verbruik",
+          "voltage": "Spanning",
+          "commands_set": "Opdrachtenset Openen_Sluiten_Stoppen",
+          "positioning_mode": "Positioneringsmodus",
+          "current_position_dp": "Huidige positie (alleen modus *positie*)",
+          "set_position_dp": "Positie instellen (alleen modus *positie*)",
+          "position_inverted": "Positie 0–100 omkeren (alleen modus *positie*)",
+          "span_time": "Volledige openingstijd in seconden (alleen modus *tijdgestuurd*)",
+          "unit_of_measurement": "Meeteenheid",
+          "device_class": "Apparaatklasse",
+          "scaling": "Schaalfactor",
+          "state_on": "Aan-waarde",
+          "state_off": "Uit-waarde",
+          "powergo_dp": "Voedings-DP (meestal 25 of 2)",
+          "idle_status_value": "Inactieve statussen (door komma's gescheiden)",
+          "returning_status_value": "Terugkeerstatus",
+          "docked_status_value": "Dockstatussen (door komma's gescheiden)",
+          "fault_dp": "Fout-DP (meestal 11)",
+          "battery_dp": "Batterijstatus-DP (meestal 14)",
+          "mode_dp": "Modus-DP (meestal 27)",
+          "modes": "Moduslijst",
+          "return_mode": "Terugkeermodus",
+          "fan_speed_dp": "Ventilatorsnelheid-DP (meestal 30)",
+          "fan_speeds": "Lijst met ventilatorsnelheden (door komma's gescheiden)",
+          "clean_time_dp": "Reinigingstijd-DP (meestal 33)",
+          "clean_area_dp": "Reinigingsoppervlak-DP (meestal 32)",
+          "clean_record_dp": "Reinigingsgeschiedenis-DP (meestal 34)",
+          "locate_dp": "Lokaliseer-DP (meestal 31)",
+          "paused_state": "Pauzestatus (pause, paused enz.)",
+          "stop_status": "Stopstatus",
+          "brightness": "Helderheid (alleen wit)",
+          "brightness_lower": "Minimale helderheid",
+          "brightness_upper": "Maximale helderheid",
+          "color_temp": "Kleurtemperatuur",
+          "color_temp_reverse": "Kleurtemperatuur omkeren",
+          "color": "Kleur",
+          "color_mode": "Kleurmodus",
+          "color_temp_min_kelvin": "Minimale kleurtemperatuur in K",
+          "color_temp_max_kelvin": "Maximale kleurtemperatuur in K",
+          "music_mode": "Muziekmodus beschikbaar",
+          "scene": "Scène",
+          "select_options": "Geldige waarden, gescheiden door ;",
+          "select_options_friendly": "Leesbare labels, gescheiden door ;",
+          "fan_speed_control": "DP voor ventilatorsnelheid",
+          "fan_oscillating_control": "DP voor ventilatoroscillatie",
+          "fan_speed_min": "Minimale ventilatorsnelheid",
+          "fan_speed_max": "Maximale ventilatorsnelheid",
+          "fan_speed_ordered_list": "Geordende lijst met ventilatorsnelheden (vervangt min./max.)",
+          "fan_direction": "DP voor ventilatorrichting",
+          "fan_direction_forward": "DP-waarde voor voorwaartse richting",
+          "fan_direction_reverse": "DP-waarde voor omgekeerde richting",
+          "fan_dps_type": "DP-waardetype",
+          "current_temperature_dp": "Huidige temperatuur",
+          "target_temperature_dp": "Doeltemperatuur",
+          "temperature_step": "Temperatuurstap (optioneel)",
+          "max_temperature_dp": "DP voor maximumtemperatuur (optioneel)",
+          "min_temperature_dp": "DP voor minimumtemperatuur (optioneel)",
+          "max_temperature_const": "Constante maximumtemperatuur (optioneel)",
+          "min_temperature_const": "Constante minimumtemperatuur (optioneel)",
+          "precision": "Precisie (optioneel, voor DP-waarden)",
+          "target_precision": "Doelprecisie (optioneel, voor DP-waarden)",
+          "temperature_unit": "Temperatuureenheid (optioneel)",
+          "hvac_mode_dp": "DP voor HVAC-modus (optioneel)",
+          "hvac_mode_set": "Waarden voor HVAC-modus (optioneel)",
+          "hvac_fan_mode_dp": "DP voor HVAC-ventilatormodus (optioneel)",
+          "hvac_fan_mode_set": "Waarden voor HVAC-ventilatormodus (optioneel)",
+          "hvac_swing_mode_dp": "DP voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_swing_mode_set": "Waarden voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_action_dp": "DP voor huidige HVAC-actie (optioneel)",
+          "hvac_action_set": "Waarden voor huidige HVAC-actie (optioneel)",
+          "preset_dp": "DP voor voorinstellingen (optioneel)",
+          "preset_set": "Lijst met voorinstellingen (optioneel)",
+          "eco_dp": "Eco-DP (optioneel)",
+          "eco_value": "Eco-waarde (optioneel)",
+          "heuristic_action": "Heuristische actiedetectie inschakelen (optioneel)",
+          "dps_default_value": "Standaardwaarde vóór initialisatie (optioneel)",
+          "restore_on_reconnect": "De laatst ingestelde waarde in Home Assistant herstellen na opnieuw verbinden",
+          "min_value": "Minimumwaarde",
+          "max_value": "Maximumwaarde",
+          "step_size": "Minimale stapgrootte",
+          "is_passive_entity": "Passieve entiteit – de integratie moet een initialisatiewaarde verzenden"
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "already_configured": "Het apparaat is al geconfigureerd.",
+      "device_success": "Apparaat {dev_name} is succesvol {action}.",
+      "no_entities": "Niet alle entiteiten van een apparaat kunnen worden verwijderd.\nAls u een apparaat wilt verwijderen, opent u het via Apparaten, klikt u op de drie puntjes in het vak ‘Apparaatinformatie’ en kiest u Verwijderen."
+    },
+    "error": {
+      "authentication_failed": "Authenticatie mislukt.\n{msg}",
+      "cannot_connect": "Kan geen verbinding maken met het apparaat. Controleer het adres en probeer het opnieuw.",
+      "device_list_failed": "Kan de apparaatlijst niet ophalen.\n{msg}",
+      "invalid_auth": "Authenticatie bij het apparaat is mislukt. Controleer de apparaat-ID en lokale sleutel.",
+      "unknown": "Er is een onbekende fout opgetreden. Bekijk het logboek voor details.",
+      "entity_already_configured": "Er is al een entiteit met deze ID geconfigureerd.",
+      "address_in_use": "Het adres voor detectie is al in gebruik. Controleer of geen andere toepassing dit gebruikt (TCP-poort 6668).",
+      "discovery_failed": "Er is iets misgegaan tijdens het detecteren van apparaten. Bekijk het logboek voor details.",
+      "empty_dps": "De verbinding met het apparaat is gelukt, maar er zijn geen datapunten gevonden. Probeer het opnieuw. Maak een issue aan en voeg debuglogboeken toe als het probleem blijft bestaan."
+    },
+    "step": {
+      "yaml_import": {
+        "title": "Niet ondersteund",
+        "description": "Opties kunnen niet worden bewerkt wanneer de configuratie via YAML is uitgevoerd."
+      },
+      "init": {
+        "title": "LocalTuya Connect-configuratie",
+        "description": "Selecteer de gewenste actie.",
+        "data": {
+          "add_device": "Nieuw apparaat toevoegen",
+          "edit_device": "Apparaat bewerken",
+          "setup_cloud": "Cloud API-account opnieuw configureren",
+          "action": "Actie"
+        }
+      },
+      "add_device": {
+        "title": "Nieuw apparaat toevoegen",
+        "description": "Kies een Tuya-apparaat. Als LAN-detectie geen adres heeft gevonden, kunt u het IP-adres in het volgende scherm invoeren. Kies `...` om handmatig een apparaat toe te voegen.",
+        "data": {
+          "selected_device": "Gedetecteerde apparaten"
+        }
+      },
+      "edit_device": {
+        "title": "Apparaat bewerken",
+        "description": "Kies het geconfigureerde apparaat dat u wilt bewerken.",
+        "data": {
+          "selected_device": "Geconfigureerde apparaten",
+          "max_temperature_const": "Constante maximumtemperatuur (optioneel)",
+          "min_temperature_const": "Constante minimumtemperatuur (optioneel)",
+          "hvac_fan_mode_dp": "DP voor HVAC-ventilatormodus (optioneel)",
+          "hvac_fan_mode_set": "Waarden voor HVAC-ventilatormodus (optioneel)",
+          "hvac_swing_mode_dp": "DP voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_swing_mode_set": "Waarden voor HVAC-oscillatiemodus (optioneel)"
+        }
+      },
+      "cloud_setup": {
+        "title": "Cloud API-accountconfiguratie",
+        "description": "Voer de aanmeldgegevens voor de Tuya Cloud API in.",
+        "data": {
+          "region": "API-serverregio",
+          "client_id": "Client-ID",
+          "client_secret": "Geheim",
+          "user_id": "Gebruikers-ID",
+          "user_name": "Gebruikersnaam",
+          "no_cloud": "Geen Cloud API-account configureren"
+        }
+      },
+      "configure_device": {
+        "title": "Tuya-apparaat configureren",
+        "description": "Vul de apparaatgegevens in{for_device}.",
+        "data": {
+          "friendly_name": "Naam",
+          "host": "IP-adres",
+          "device_id": "Apparaat-ID",
+          "local_key": "Lokale sleutel",
+          "protocol_version": "Protocolversie",
+          "enable_debug": "Debugging voor dit apparaat inschakelen (debugging moet ook in configuration.yaml zijn ingeschakeld)",
+          "scan_interval": "Scaninterval (seconden, alleen wanneer niet automatisch wordt bijgewerkt)",
+          "entities": "Entiteiten (vink een entiteit uit om deze te verwijderen)",
+          "add_entities": "Meer entiteiten toevoegen in de modus ‘apparaat bewerken’",
+          "manual_dps_strings": "Handmatig toe te voegen DPS (gescheiden door komma's), te gebruiken wanneer detectie niet werkt (optioneel)",
+          "reset_dpids": "DPID's voor de RESET-opdracht (gescheiden door komma's), te gebruiken als het apparaat na inschakelen niet op statusverzoeken reageert (optioneel)",
+          "auto_configure_entities": "Bekende entiteiten automatisch configureren op basis van Tuya-metadata"
+        }
+      },
+      "pick_entity_type": {
+        "title": "Entiteitstype selecteren",
+        "description": "Kies het type entiteit dat u wilt toevoegen.",
+        "data": {
+          "platform_to_add": "Platform",
+          "no_additional_entities": "Geen entiteiten meer toevoegen"
+        }
+      },
+      "configure_entity": {
+        "title": "Entiteit configureren",
+        "description": "Vul de gegevens in voor {entity} van type `{platform}`. Alle instellingen behalve `ID` kunnen later via Opties worden gewijzigd.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Weergavenaam",
+          "current": "Stroom",
+          "current_consumption": "Huidig verbruik",
+          "voltage": "Spanning",
+          "commands_set": "Opdrachtenset Openen_Sluiten_Stoppen",
+          "positioning_mode": "Positioneringsmodus",
+          "current_position_dp": "Huidige positie (alleen modus *positie*)",
+          "set_position_dp": "Positie instellen (alleen modus *positie*)",
+          "position_inverted": "Positie 0–100 omkeren (alleen modus *positie*)",
+          "span_time": "Volledige openingstijd in seconden (alleen modus *tijdgestuurd*)",
+          "unit_of_measurement": "Meeteenheid",
+          "device_class": "Apparaatklasse",
+          "scaling": "Schaalfactor",
+          "state_on": "Aan-waarde",
+          "state_off": "Uit-waarde",
+          "powergo_dp": "Voedings-DP (meestal 25 of 2)",
+          "idle_status_value": "Inactieve statussen (door komma's gescheiden)",
+          "returning_status_value": "Terugkeerstatus",
+          "docked_status_value": "Dockstatussen (door komma's gescheiden)",
+          "fault_dp": "Fout-DP (meestal 11)",
+          "battery_dp": "Batterijstatus-DP (meestal 14)",
+          "mode_dp": "Modus-DP (meestal 27)",
+          "modes": "Moduslijst",
+          "return_mode": "Terugkeermodus",
+          "fan_speed_dp": "Ventilatorsnelheid-DP (meestal 30)",
+          "fan_speeds": "Lijst met ventilatorsnelheden (door komma's gescheiden)",
+          "clean_time_dp": "Reinigingstijd-DP (meestal 33)",
+          "clean_area_dp": "Reinigingsoppervlak-DP (meestal 32)",
+          "clean_record_dp": "Reinigingsgeschiedenis-DP (meestal 34)",
+          "locate_dp": "Lokaliseer-DP (meestal 31)",
+          "paused_state": "Pauzestatus (pause, paused enz.)",
+          "stop_status": "Stopstatus",
+          "brightness": "Helderheid (alleen wit)",
+          "brightness_lower": "Minimale helderheid",
+          "brightness_upper": "Maximale helderheid",
+          "color_temp": "Kleurtemperatuur",
+          "color_temp_reverse": "Kleurtemperatuur omkeren",
+          "color": "Kleur",
+          "color_mode": "Kleurmodus",
+          "color_temp_min_kelvin": "Minimale kleurtemperatuur in K",
+          "color_temp_max_kelvin": "Maximale kleurtemperatuur in K",
+          "music_mode": "Muziekmodus beschikbaar",
+          "scene": "Scène",
+          "select_options": "Geldige waarden, gescheiden door ;",
+          "select_options_friendly": "Leesbare labels, gescheiden door ;",
+          "fan_speed_control": "DP voor ventilatorsnelheid",
+          "fan_oscillating_control": "DP voor ventilatoroscillatie",
+          "fan_speed_min": "Minimale ventilatorsnelheid",
+          "fan_speed_max": "Maximale ventilatorsnelheid",
+          "fan_speed_ordered_list": "Geordende lijst met ventilatorsnelheden (vervangt min./max.)",
+          "fan_direction": "DP voor ventilatorrichting",
+          "fan_direction_forward": "DP-waarde voor voorwaartse richting",
+          "fan_direction_reverse": "DP-waarde voor omgekeerde richting",
+          "fan_dps_type": "DP-waardetype",
+          "current_temperature_dp": "Huidige temperatuur",
+          "target_temperature_dp": "Doeltemperatuur",
+          "temperature_step": "Temperatuurstap (optioneel)",
+          "max_temperature_dp": "DP voor maximumtemperatuur (optioneel)",
+          "min_temperature_dp": "DP voor minimumtemperatuur (optioneel)",
+          "max_temperature_const": "Constante maximumtemperatuur (optioneel)",
+          "min_temperature_const": "Constante minimumtemperatuur (optioneel)",
+          "precision": "Precisie (optioneel, voor DP-waarden)",
+          "target_precision": "Doelprecisie (optioneel, voor DP-waarden)",
+          "temperature_unit": "Temperatuureenheid (optioneel)",
+          "hvac_mode_dp": "DP voor HVAC-modus (optioneel)",
+          "hvac_mode_set": "Waarden voor HVAC-modus (optioneel)",
+          "hvac_fan_mode_dp": "DP voor HVAC-ventilatormodus (optioneel)",
+          "hvac_fan_mode_set": "Waarden voor HVAC-ventilatormodus (optioneel)",
+          "hvac_swing_mode_dp": "DP voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_swing_mode_set": "Waarden voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_action_dp": "DP voor huidige HVAC-actie (optioneel)",
+          "hvac_action_set": "Waarden voor huidige HVAC-actie (optioneel)",
+          "preset_dp": "DP voor voorinstellingen (optioneel)",
+          "preset_set": "Lijst met voorinstellingen (optioneel)",
+          "eco_dp": "Eco-DP (optioneel)",
+          "eco_value": "Eco-waarde (optioneel)",
+          "heuristic_action": "Heuristische actiedetectie inschakelen (optioneel)",
+          "dps_default_value": "Standaardwaarde vóór initialisatie (optioneel)",
+          "restore_on_reconnect": "De laatst ingestelde waarde in Home Assistant herstellen na opnieuw verbinden",
+          "min_value": "Minimumwaarde",
+          "max_value": "Maximumwaarde",
+          "step_size": "Minimale stapgrootte",
+          "is_passive_entity": "Passieve entiteit – de integratie moet een initialisatiewaarde verzenden"
+        }
+      },
+      "entity": {
+        "title": "Entiteitsconfiguratie",
+        "description": "De entiteit met DP `{id}` en platform `{platform}` bewerken.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Weergavenaam",
+          "current": "Stroom",
+          "current_consumption": "Huidig verbruik",
+          "voltage": "Spanning",
+          "commands_set": "Opdrachtenset Openen_Sluiten_Stoppen",
+          "positioning_mode": "Positioneringsmodus",
+          "current_position_dp": "Huidige positie (alleen modus *positie*)",
+          "set_position_dp": "Positie instellen (alleen modus *positie*)",
+          "position_inverted": "Positie 0–100 omkeren (alleen modus *positie*)",
+          "span_time": "Volledige openingstijd in seconden (alleen modus *tijdgestuurd*)",
+          "unit_of_measurement": "Meeteenheid",
+          "device_class": "Apparaatklasse",
+          "scaling": "Schaalfactor",
+          "state_on": "Aan-waarde",
+          "state_off": "Uit-waarde",
+          "powergo_dp": "Voedings-DP (meestal 25 of 2)",
+          "idle_status_value": "Inactieve statussen (door komma's gescheiden)",
+          "returning_status_value": "Terugkeerstatus",
+          "docked_status_value": "Dockstatussen (door komma's gescheiden)",
+          "fault_dp": "Fout-DP (meestal 11)",
+          "battery_dp": "Batterijstatus-DP (meestal 14)",
+          "mode_dp": "Modus-DP (meestal 27)",
+          "modes": "Moduslijst",
+          "return_mode": "Terugkeermodus",
+          "fan_speed_dp": "Ventilatorsnelheid-DP (meestal 30)",
+          "fan_speeds": "Lijst met ventilatorsnelheden (door komma's gescheiden)",
+          "clean_time_dp": "Reinigingstijd-DP (meestal 33)",
+          "clean_area_dp": "Reinigingsoppervlak-DP (meestal 32)",
+          "clean_record_dp": "Reinigingsgeschiedenis-DP (meestal 34)",
+          "locate_dp": "Lokaliseer-DP (meestal 31)",
+          "paused_state": "Pauzestatus (pause, paused enz.)",
+          "stop_status": "Stopstatus",
+          "brightness": "Helderheid (alleen wit)",
+          "brightness_lower": "Minimale helderheid",
+          "brightness_upper": "Maximale helderheid",
+          "color_temp": "Kleurtemperatuur",
+          "color_temp_reverse": "Kleurtemperatuur omkeren",
+          "color": "Kleur",
+          "color_mode": "Kleurmodus",
+          "color_temp_min_kelvin": "Minimale kleurtemperatuur in K",
+          "color_temp_max_kelvin": "Maximale kleurtemperatuur in K",
+          "music_mode": "Muziekmodus beschikbaar",
+          "scene": "Scène",
+          "select_options": "Geldige waarden, gescheiden door ;",
+          "select_options_friendly": "Leesbare labels, gescheiden door ;",
+          "fan_speed_control": "DP voor ventilatorsnelheid",
+          "fan_oscillating_control": "DP voor ventilatoroscillatie",
+          "fan_speed_min": "Minimale ventilatorsnelheid",
+          "fan_speed_max": "Maximale ventilatorsnelheid",
+          "fan_speed_ordered_list": "Geordende lijst met ventilatorsnelheden (vervangt min./max.)",
+          "fan_direction": "DP voor ventilatorrichting",
+          "fan_direction_forward": "DP-waarde voor voorwaartse richting",
+          "fan_direction_reverse": "DP-waarde voor omgekeerde richting",
+          "fan_dps_type": "DP-waardetype",
+          "current_temperature_dp": "Huidige temperatuur",
+          "target_temperature_dp": "Doeltemperatuur",
+          "temperature_step": "Temperatuurstap (optioneel)",
+          "max_temperature_dp": "DP voor maximumtemperatuur (optioneel)",
+          "min_temperature_dp": "DP voor minimumtemperatuur (optioneel)",
+          "max_temperature_const": "Constante maximumtemperatuur (optioneel)",
+          "min_temperature_const": "Constante minimumtemperatuur (optioneel)",
+          "precision": "Precisie (optioneel, voor DP-waarden)",
+          "target_precision": "Doelprecisie (optioneel, voor DP-waarden)",
+          "temperature_unit": "Temperatuureenheid (optioneel)",
+          "hvac_mode_dp": "DP voor HVAC-modus (optioneel)",
+          "hvac_mode_set": "Waarden voor HVAC-modus (optioneel)",
+          "hvac_fan_mode_dp": "DP voor HVAC-ventilatormodus (optioneel)",
+          "hvac_fan_mode_set": "Waarden voor HVAC-ventilatormodus (optioneel)",
+          "hvac_swing_mode_dp": "DP voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_swing_mode_set": "Waarden voor HVAC-oscillatiemodus (optioneel)",
+          "hvac_action_dp": "DP voor huidige HVAC-actie (optioneel)",
+          "hvac_action_set": "Waarden voor huidige HVAC-actie (optioneel)",
+          "preset_dp": "DP voor voorinstellingen (optioneel)",
+          "preset_set": "Lijst met voorinstellingen (optioneel)",
+          "eco_dp": "Eco-DP (optioneel)",
+          "eco_value": "Eco-waarde (optioneel)",
+          "heuristic_action": "Heuristische actiedetectie inschakelen (optioneel)",
+          "dps_default_value": "Standaardwaarde vóór initialisatie (optioneel)",
+          "restore_on_reconnect": "De laatst ingestelde waarde in Home Assistant herstellen na opnieuw verbinden",
+          "min_value": "Minimumwaarde",
+          "max_value": "Maximumwaarde",
+          "step_size": "Minimale stapgrootte",
+          "is_passive_entity": "Passieve entiteit – de integratie moet een initialisatiewaarde verzenden"
+        }
+      }
+    }
+  },
+  "services": {
+    "reload": {
+      "name": "Herladen",
+      "description": "LocalTuya Connect opnieuw laden en alle apparaten opnieuw verbinden."
+    },
+    "set_dp": {
+      "name": "Datapunt instellen",
+      "description": "De waarde van een datapunt (DP) wijzigen.",
+      "fields": {
+        "device_id": {
+          "name": "Apparaat-ID",
+          "description": "Apparaat-ID van het apparaat waarvan de datapuntwaarde moet worden gewijzigd."
+        },
+        "dp": {
+          "name": "DP",
+          "description": "Datapuntindex"
+        },
+        "value": {
+          "name": "Waarde",
+          "description": "Nieuwe waarde om in te stellen."
+        }
+      }
+    }
+  },
+  "title": "LocalTuya Connect",
+  "entity": {
+    "sensor": {
+      "cur_current": {
+        "name": "Stroom"
+      },
+      "cur_power": {
+        "name": "Vermogen"
+      },
+      "cur_voltage": {
+        "name": "Spanning"
+      },
+      "add_ele": {
+        "name": "Energie"
+      }
+    },
+    "number": {
+      "countdown_1": {
+        "name": "Aftellen"
+      }
+    },
+    "select": {
+      "relay_status": {
+        "name": "Inschakelstatus",
+        "state": {
+          "power_off": "Uit na stroomuitval",
+          "power_on": "Aan na stroomuitval",
+          "last": "Laatste status herstellen"
+        }
+      },
+      "light_mode": {
+        "name": "Indicatormodus",
+        "state": {
+          "relay": "Relais volgen",
+          "pos": "Positie",
+          "none": "Uit"
+        }
+      }
+    }
+  },
+  "selector": {
+    "localtuya_action": {
+      "options": {
+        "add_device": "Nieuw apparaat toevoegen",
+        "edit_device": "Apparaat bewerken",
+        "setup_cloud": "Cloudaccount opnieuw configureren"
+      }
+    },
+    "protocol_version": {
+      "options": {
+        "auto": "Automatisch",
+        "3.1": "3.1",
+        "3.2": "3.2",
+        "3.3": "3.3",
+        "3.4": "3.4",
+        "3.5": "3.5"
+      }
+    },
+    "entity_platform": {
+      "options": {
+        "binary_sensor": "Binaire sensor",
+        "climate": "Klimaat",
+        "cover": "Rolluik / afdekking",
+        "fan": "Ventilator",
+        "light": "Licht",
+        "number": "Getal",
+        "select": "Selectie",
+        "sensor": "Sensor",
+        "switch": "Schakelaar",
+        "vacuum": "Stofzuiger"
+      }
+    }
+  }
+}

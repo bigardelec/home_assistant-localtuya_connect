@@ -1,0 +1,673 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Das Gerät wurde bereits konfiguriert.",
+      "device_updated": "Die Gerätekonfiguration wurde aktualisiert!",
+      "device_success": "Gerät {dev_name} wurde erfolgreich {action}.",
+      "no_entities": "Es können nicht alle Entitäten eines Geräts entfernt werden.\nWenn Sie ein Gerät löschen möchten, öffnen Sie es im Menü Geräte, klicken Sie im Bereich „Geräteinformationen“ auf die drei Punkte und anschließend auf Löschen."
+    },
+    "error": {
+      "authentication_failed": "Authentifizierung fehlgeschlagen.\n{msg}",
+      "cannot_connect": "Verbindung zum Gerät nicht möglich. Prüfen Sie die Adresse und versuchen Sie es erneut.",
+      "device_list_failed": "Die Anmeldung war erfolgreich, aber die Tuya-Geräteliste konnte nicht geladen werden: {msg}",
+      "invalid_auth": "Authentifizierung am Gerät fehlgeschlagen. Prüfen Sie Geräte-ID und lokalen Schlüssel.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten. Weitere Informationen finden Sie im Protokoll.",
+      "entity_already_configured": "Eine Entität mit dieser ID wurde bereits konfiguriert.",
+      "address_in_use": "Die für die Erkennung verwendete Adresse wird bereits benutzt. Stellen Sie sicher, dass keine andere Anwendung sie verwendet (TCP-Port 6668).",
+      "discovery_failed": "Bei der Geräteerkennung ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Protokoll.",
+      "empty_dps": "Die Verbindung zum Gerät war erfolgreich, es wurden jedoch keine Datenpunkte gefunden. Versuchen Sie es erneut. Falls das Problem bestehen bleibt, erstellen Sie ein Issue und fügen Sie Debug-Protokolle bei.",
+      "qr_login_error": "Tuya-QR-Anmeldung konnte nicht gestartet werden ({code}): {msg}",
+      "qr_not_confirmed": "Die Anmeldung wurde nicht bestätigt oder der QR-Code ist abgelaufen ({code}): {msg}"
+    },
+    "step": {
+      "user": {
+        "title": "Smart Life / Tuya Smart-Anmeldung",
+        "description": "Geben Sie den Benutzercode aus der Smart Life- oder Tuya Smart-App ein. Sie finden ihn unter Einstellungen > Konto und Sicherheit > Benutzercode. Ein Tuya-Developer-Konto ist nicht erforderlich.",
+        "data": {
+          "user_code": "Benutzercode"
+        }
+      },
+      "scan": {
+        "title": "Mit Smart Life / Tuya Smart scannen",
+        "description": "Scannen Sie den QR-Code mit Smart Life oder Tuya Smart (+ > Scannen), bestätigen Sie die Anmeldung in der App und klicken Sie anschließend hier auf Senden.",
+        "data": {
+          "QR": "QR-Code"
+        }
+      },
+      "power_outlet": {
+        "title": "Unterschalter hinzufügen",
+        "description": "Sie fügen gleich den Unterschalter Nummer `{number}` hinzu. Aktivieren Sie `Weiteren Schalter hinzufügen`, wenn Sie anschließend noch einen hinzufügen möchten.",
+        "data": {
+          "id": "ID",
+          "name": "Name",
+          "friendly_name": "Anzeigename",
+          "current": "Strom",
+          "current_consumption": "Aktueller Verbrauch",
+          "voltage": "Spannung",
+          "add_another_switch": "Weiteren Schalter hinzufügen"
+        }
+      },
+      "yaml_import": {
+        "title": "Nicht unterstützt",
+        "description": "Bei einer Konfiguration über YAML können die Optionen nicht bearbeitet werden."
+      },
+      "init": {
+        "title": "LocalTuya Connect-Konfiguration",
+        "description": "Wählen Sie die gewünschte Aktion.",
+        "data": {
+          "add_device": "Neues Gerät hinzufügen",
+          "edit_device": "Gerät bearbeiten",
+          "setup_cloud": "Cloud-API-Konto neu konfigurieren",
+          "action": "Aktion"
+        }
+      },
+      "add_device": {
+        "title": "Neues Gerät hinzufügen",
+        "description": "Wählen Sie ein Tuya-Gerät. Wenn die LAN-Erkennung keine Adresse geliefert hat, können Sie die IP-Adresse im nächsten Bildschirm eingeben. Wählen Sie `...`, um ein Gerät manuell hinzuzufügen.",
+        "data": {
+          "selected_device": "Erkannte Geräte"
+        }
+      },
+      "edit_device": {
+        "title": "Gerät bearbeiten",
+        "description": "Wählen Sie das konfigurierte Gerät aus, das Sie bearbeiten möchten.",
+        "data": {
+          "selected_device": "Konfigurierte Geräte",
+          "max_temperature_const": "Konstante Maximaltemperatur (optional)",
+          "min_temperature_const": "Konstante Minimaltemperatur (optional)",
+          "hvac_fan_mode_dp": "DP für HVAC-Lüftermodus (optional)",
+          "hvac_fan_mode_set": "Werte für HVAC-Lüftermodus (optional)",
+          "hvac_swing_mode_dp": "DP für HVAC-Schwenkmodus (optional)",
+          "hvac_swing_mode_set": "Werte für HVAC-Schwenkmodus (optional)"
+        }
+      },
+      "cloud_setup": {
+        "title": "Cloud-API-Kontokonfiguration",
+        "description": "Geben Sie die Zugangsdaten für die Tuya Cloud API ein.",
+        "data": {
+          "region": "API-Serverregion",
+          "client_id": "Client-ID",
+          "client_secret": "Geheimnis",
+          "user_id": "Benutzer-ID",
+          "user_name": "Benutzername",
+          "no_cloud": "Kein Cloud-API-Konto konfigurieren"
+        }
+      },
+      "configure_device": {
+        "title": "Tuya-Gerät konfigurieren",
+        "description": "Geben Sie die Gerätedaten ein{for_device}.",
+        "data": {
+          "friendly_name": "Name",
+          "host": "IP-Adresse",
+          "device_id": "Geräte-ID",
+          "local_key": "Lokaler Schlüssel",
+          "protocol_version": "Protokollversion",
+          "enable_debug": "Debugging für dieses Gerät aktivieren (Debugging muss auch in configuration.yaml aktiviert sein)",
+          "scan_interval": "Abfrageintervall (Sekunden, nur wenn keine automatische Aktualisierung erfolgt)",
+          "entities": "Entitäten (zum Entfernen einer Entität das Häkchen entfernen)",
+          "add_entities": "Weitere Entitäten im Modus „Gerät bearbeiten“ hinzufügen",
+          "manual_dps_strings": "Manuell hinzuzufügende DPS (durch Kommas getrennt), falls die Erkennung nicht funktioniert (optional)",
+          "reset_dpids": "DPIDs für den RESET-Befehl (durch Kommas getrennt), falls das Gerät nach dem Einschalten nicht auf Statusabfragen reagiert (optional)",
+          "auto_configure_entities": "Bekannte Entitäten automatisch anhand der Tuya-Metadaten konfigurieren"
+        }
+      },
+      "pick_entity_type": {
+        "title": "Entitätstyp auswählen",
+        "description": "Wählen Sie den Typ der Entität aus, die Sie hinzufügen möchten.",
+        "data": {
+          "platform_to_add": "Plattform",
+          "no_additional_entities": "Keine weiteren Entitäten hinzufügen"
+        }
+      },
+      "configure_entity": {
+        "title": "Entität konfigurieren",
+        "description": "Geben Sie die Details für {entity} vom Typ `{platform}` ein. Alle Einstellungen außer `ID` können später unter Optionen geändert werden.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Anzeigename",
+          "current": "Strom",
+          "current_consumption": "Aktueller Verbrauch",
+          "voltage": "Spannung",
+          "commands_set": "Befehlssatz Öffnen_Schließen_Stopp",
+          "positioning_mode": "Positionierungsmodus",
+          "current_position_dp": "Aktuelle Position (nur Modus *Position*)",
+          "set_position_dp": "Position setzen (nur Modus *Position*)",
+          "position_inverted": "Position 0–100 umkehren (nur Modus *Position*)",
+          "span_time": "Vollständige Öffnungszeit in Sekunden (nur Modus *Zeitgesteuert*)",
+          "unit_of_measurement": "Maßeinheit",
+          "device_class": "Geräteklasse",
+          "scaling": "Skalierungsfaktor",
+          "state_on": "Ein-Wert",
+          "state_off": "Aus-Wert",
+          "powergo_dp": "Strom-DP (normalerweise 25 oder 2)",
+          "idle_status_value": "Leerlaufzustände (durch Kommas getrennt)",
+          "returning_status_value": "Rückkehrzustand",
+          "docked_status_value": "Zustände an der Ladestation (durch Kommas getrennt)",
+          "fault_dp": "Fehler-DP (normalerweise 11)",
+          "battery_dp": "Batteriestatus-DP (normalerweise 14)",
+          "mode_dp": "Modus-DP (normalerweise 27)",
+          "modes": "Modusliste",
+          "return_mode": "Rückkehrmodus",
+          "fan_speed_dp": "Lüftergeschwindigkeits-DP (normalerweise 30)",
+          "fan_speeds": "Liste der Lüftergeschwindigkeiten (durch Kommas getrennt)",
+          "clean_time_dp": "Reinigungszeit-DP (normalerweise 33)",
+          "clean_area_dp": "Reinigungsflächen-DP (normalerweise 32)",
+          "clean_record_dp": "Reinigungsverlauf-DP (normalerweise 34)",
+          "locate_dp": "Ortungs-DP (normalerweise 31)",
+          "paused_state": "Pausenzustand (pause, paused usw.)",
+          "stop_status": "Stoppzustand",
+          "brightness": "Helligkeit (nur Weiß)",
+          "brightness_lower": "Minimaler Helligkeitswert",
+          "brightness_upper": "Maximaler Helligkeitswert",
+          "color_temp": "Farbtemperatur",
+          "color_temp_reverse": "Farbtemperatur umkehren",
+          "color": "Farbe",
+          "color_mode": "Farbmodus",
+          "color_temp_min_kelvin": "Minimale Farbtemperatur in K",
+          "color_temp_max_kelvin": "Maximale Farbtemperatur in K",
+          "music_mode": "Musikmodus verfügbar",
+          "scene": "Szene",
+          "select_options": "Gültige Einträge, durch ; getrennt",
+          "select_options_friendly": "Lesbare Bezeichnungen, durch ; getrennt",
+          "fan_speed_control": "DP für Lüftergeschwindigkeit",
+          "fan_oscillating_control": "DP für Lüfteroszillation",
+          "fan_speed_min": "Minimale Lüftergeschwindigkeit",
+          "fan_speed_max": "Maximale Lüftergeschwindigkeit",
+          "fan_speed_ordered_list": "Geordnete Liste der Lüftergeschwindigkeiten (ersetzt Min./Max.)",
+          "fan_direction": "DP für Lüfterrichtung",
+          "fan_direction_forward": "DP-Wert für Vorwärtsrichtung",
+          "fan_direction_reverse": "DP-Wert für Rückwärtsrichtung",
+          "fan_dps_type": "DP-Werttyp",
+          "current_temperature_dp": "Aktuelle Temperatur",
+          "target_temperature_dp": "Zieltemperatur",
+          "temperature_step": "Temperaturschritt (optional)",
+          "max_temperature_dp": "DP für Maximaltemperatur (optional)",
+          "min_temperature_dp": "DP für Minimaltemperatur (optional)",
+          "max_temperature_const": "Konstante Maximaltemperatur (optional)",
+          "min_temperature_const": "Konstante Minimaltemperatur (optional)",
+          "precision": "Genauigkeit (optional, für DP-Werte)",
+          "target_precision": "Zielgenauigkeit (optional, für DP-Werte)",
+          "temperature_unit": "Temperatureinheit (optional)",
+          "hvac_mode_dp": "DP für HVAC-Modus (optional)",
+          "hvac_mode_set": "Werte für HVAC-Modus (optional)",
+          "hvac_fan_mode_dp": "DP für HVAC-Lüftermodus (optional)",
+          "hvac_fan_mode_set": "Werte für HVAC-Lüftermodus (optional)",
+          "hvac_swing_mode_dp": "DP für HVAC-Schwenkmodus (optional)",
+          "hvac_swing_mode_set": "Werte für HVAC-Schwenkmodus (optional)",
+          "hvac_action_dp": "DP für aktuelle HVAC-Aktion (optional)",
+          "hvac_action_set": "Werte für aktuelle HVAC-Aktion (optional)",
+          "preset_dp": "DP für Voreinstellungen (optional)",
+          "preset_set": "Liste der Voreinstellungen (optional)",
+          "eco_dp": "Eco-DP (optional)",
+          "eco_value": "Eco-Wert (optional)",
+          "heuristic_action": "Heuristische Aktionserkennung aktivieren (optional)",
+          "dps_default_value": "Standardwert vor Initialisierung (optional)",
+          "restore_on_reconnect": "Letzten in Home Assistant gesetzten Wert nach einer erneuten Verbindung wiederherstellen",
+          "min_value": "Minimalwert",
+          "max_value": "Maximalwert",
+          "step_size": "Minimale Schrittweite",
+          "is_passive_entity": "Passive Entität – die Integration muss einen Initialisierungswert senden"
+        }
+      },
+      "entity": {
+        "title": "Entitätskonfiguration",
+        "description": "Bearbeitung der Entität mit DP `{id}` und Plattform `{platform}`.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Anzeigename",
+          "current": "Strom",
+          "current_consumption": "Aktueller Verbrauch",
+          "voltage": "Spannung",
+          "commands_set": "Befehlssatz Öffnen_Schließen_Stopp",
+          "positioning_mode": "Positionierungsmodus",
+          "current_position_dp": "Aktuelle Position (nur Modus *Position*)",
+          "set_position_dp": "Position setzen (nur Modus *Position*)",
+          "position_inverted": "Position 0–100 umkehren (nur Modus *Position*)",
+          "span_time": "Vollständige Öffnungszeit in Sekunden (nur Modus *Zeitgesteuert*)",
+          "unit_of_measurement": "Maßeinheit",
+          "device_class": "Geräteklasse",
+          "scaling": "Skalierungsfaktor",
+          "state_on": "Ein-Wert",
+          "state_off": "Aus-Wert",
+          "powergo_dp": "Strom-DP (normalerweise 25 oder 2)",
+          "idle_status_value": "Leerlaufzustände (durch Kommas getrennt)",
+          "returning_status_value": "Rückkehrzustand",
+          "docked_status_value": "Zustände an der Ladestation (durch Kommas getrennt)",
+          "fault_dp": "Fehler-DP (normalerweise 11)",
+          "battery_dp": "Batteriestatus-DP (normalerweise 14)",
+          "mode_dp": "Modus-DP (normalerweise 27)",
+          "modes": "Modusliste",
+          "return_mode": "Rückkehrmodus",
+          "fan_speed_dp": "Lüftergeschwindigkeits-DP (normalerweise 30)",
+          "fan_speeds": "Liste der Lüftergeschwindigkeiten (durch Kommas getrennt)",
+          "clean_time_dp": "Reinigungszeit-DP (normalerweise 33)",
+          "clean_area_dp": "Reinigungsflächen-DP (normalerweise 32)",
+          "clean_record_dp": "Reinigungsverlauf-DP (normalerweise 34)",
+          "locate_dp": "Ortungs-DP (normalerweise 31)",
+          "paused_state": "Pausenzustand (pause, paused usw.)",
+          "stop_status": "Stoppzustand",
+          "brightness": "Helligkeit (nur Weiß)",
+          "brightness_lower": "Minimaler Helligkeitswert",
+          "brightness_upper": "Maximaler Helligkeitswert",
+          "color_temp": "Farbtemperatur",
+          "color_temp_reverse": "Farbtemperatur umkehren",
+          "color": "Farbe",
+          "color_mode": "Farbmodus",
+          "color_temp_min_kelvin": "Minimale Farbtemperatur in K",
+          "color_temp_max_kelvin": "Maximale Farbtemperatur in K",
+          "music_mode": "Musikmodus verfügbar",
+          "scene": "Szene",
+          "select_options": "Gültige Einträge, durch ; getrennt",
+          "select_options_friendly": "Lesbare Bezeichnungen, durch ; getrennt",
+          "fan_speed_control": "DP für Lüftergeschwindigkeit",
+          "fan_oscillating_control": "DP für Lüfteroszillation",
+          "fan_speed_min": "Minimale Lüftergeschwindigkeit",
+          "fan_speed_max": "Maximale Lüftergeschwindigkeit",
+          "fan_speed_ordered_list": "Geordnete Liste der Lüftergeschwindigkeiten (ersetzt Min./Max.)",
+          "fan_direction": "DP für Lüfterrichtung",
+          "fan_direction_forward": "DP-Wert für Vorwärtsrichtung",
+          "fan_direction_reverse": "DP-Wert für Rückwärtsrichtung",
+          "fan_dps_type": "DP-Werttyp",
+          "current_temperature_dp": "Aktuelle Temperatur",
+          "target_temperature_dp": "Zieltemperatur",
+          "temperature_step": "Temperaturschritt (optional)",
+          "max_temperature_dp": "DP für Maximaltemperatur (optional)",
+          "min_temperature_dp": "DP für Minimaltemperatur (optional)",
+          "max_temperature_const": "Konstante Maximaltemperatur (optional)",
+          "min_temperature_const": "Konstante Minimaltemperatur (optional)",
+          "precision": "Genauigkeit (optional, für DP-Werte)",
+          "target_precision": "Zielgenauigkeit (optional, für DP-Werte)",
+          "temperature_unit": "Temperatureinheit (optional)",
+          "hvac_mode_dp": "DP für HVAC-Modus (optional)",
+          "hvac_mode_set": "Werte für HVAC-Modus (optional)",
+          "hvac_fan_mode_dp": "DP für HVAC-Lüftermodus (optional)",
+          "hvac_fan_mode_set": "Werte für HVAC-Lüftermodus (optional)",
+          "hvac_swing_mode_dp": "DP für HVAC-Schwenkmodus (optional)",
+          "hvac_swing_mode_set": "Werte für HVAC-Schwenkmodus (optional)",
+          "hvac_action_dp": "DP für aktuelle HVAC-Aktion (optional)",
+          "hvac_action_set": "Werte für aktuelle HVAC-Aktion (optional)",
+          "preset_dp": "DP für Voreinstellungen (optional)",
+          "preset_set": "Liste der Voreinstellungen (optional)",
+          "eco_dp": "Eco-DP (optional)",
+          "eco_value": "Eco-Wert (optional)",
+          "heuristic_action": "Heuristische Aktionserkennung aktivieren (optional)",
+          "dps_default_value": "Standardwert vor Initialisierung (optional)",
+          "restore_on_reconnect": "Letzten in Home Assistant gesetzten Wert nach einer erneuten Verbindung wiederherstellen",
+          "min_value": "Minimalwert",
+          "max_value": "Maximalwert",
+          "step_size": "Minimale Schrittweite",
+          "is_passive_entity": "Passive Entität – die Integration muss einen Initialisierungswert senden"
+        }
+      }
+    }
+  },
+  "options": {
+    "abort": {
+      "already_configured": "Das Gerät wurde bereits konfiguriert.",
+      "device_success": "Gerät {dev_name} wurde erfolgreich {action}.",
+      "no_entities": "Es können nicht alle Entitäten eines Geräts entfernt werden.\nWenn Sie ein Gerät löschen möchten, öffnen Sie es im Menü Geräte, klicken Sie im Bereich „Geräteinformationen“ auf die drei Punkte und anschließend auf Löschen."
+    },
+    "error": {
+      "authentication_failed": "Authentifizierung fehlgeschlagen.\n{msg}",
+      "cannot_connect": "Verbindung zum Gerät nicht möglich. Prüfen Sie die Adresse und versuchen Sie es erneut.",
+      "device_list_failed": "Geräteliste konnte nicht abgerufen werden.\n{msg}",
+      "invalid_auth": "Authentifizierung am Gerät fehlgeschlagen. Prüfen Sie Geräte-ID und lokalen Schlüssel.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten. Weitere Informationen finden Sie im Protokoll.",
+      "entity_already_configured": "Eine Entität mit dieser ID wurde bereits konfiguriert.",
+      "address_in_use": "Die für die Erkennung verwendete Adresse wird bereits benutzt. Stellen Sie sicher, dass keine andere Anwendung sie verwendet (TCP-Port 6668).",
+      "discovery_failed": "Bei der Geräteerkennung ist ein Fehler aufgetreten. Weitere Informationen finden Sie im Protokoll.",
+      "empty_dps": "Die Verbindung zum Gerät war erfolgreich, es wurden jedoch keine Datenpunkte gefunden. Versuchen Sie es erneut. Falls das Problem bestehen bleibt, erstellen Sie ein Issue und fügen Sie Debug-Protokolle bei."
+    },
+    "step": {
+      "yaml_import": {
+        "title": "Nicht unterstützt",
+        "description": "Bei einer Konfiguration über YAML können die Optionen nicht bearbeitet werden."
+      },
+      "init": {
+        "title": "LocalTuya Connect-Konfiguration",
+        "description": "Wählen Sie die gewünschte Aktion.",
+        "data": {
+          "add_device": "Neues Gerät hinzufügen",
+          "edit_device": "Gerät bearbeiten",
+          "setup_cloud": "Cloud-API-Konto neu konfigurieren",
+          "action": "Aktion"
+        }
+      },
+      "add_device": {
+        "title": "Neues Gerät hinzufügen",
+        "description": "Wählen Sie ein Tuya-Gerät. Wenn die LAN-Erkennung keine Adresse geliefert hat, können Sie die IP-Adresse im nächsten Bildschirm eingeben. Wählen Sie `...`, um ein Gerät manuell hinzuzufügen.",
+        "data": {
+          "selected_device": "Erkannte Geräte"
+        }
+      },
+      "edit_device": {
+        "title": "Gerät bearbeiten",
+        "description": "Wählen Sie das konfigurierte Gerät aus, das Sie bearbeiten möchten.",
+        "data": {
+          "selected_device": "Konfigurierte Geräte",
+          "max_temperature_const": "Konstante Maximaltemperatur (optional)",
+          "min_temperature_const": "Konstante Minimaltemperatur (optional)",
+          "hvac_fan_mode_dp": "DP für HVAC-Lüftermodus (optional)",
+          "hvac_fan_mode_set": "Werte für HVAC-Lüftermodus (optional)",
+          "hvac_swing_mode_dp": "DP für HVAC-Schwenkmodus (optional)",
+          "hvac_swing_mode_set": "Werte für HVAC-Schwenkmodus (optional)"
+        }
+      },
+      "cloud_setup": {
+        "title": "Cloud-API-Kontokonfiguration",
+        "description": "Geben Sie die Zugangsdaten für die Tuya Cloud API ein.",
+        "data": {
+          "region": "API-Serverregion",
+          "client_id": "Client-ID",
+          "client_secret": "Geheimnis",
+          "user_id": "Benutzer-ID",
+          "user_name": "Benutzername",
+          "no_cloud": "Kein Cloud-API-Konto konfigurieren"
+        }
+      },
+      "configure_device": {
+        "title": "Tuya-Gerät konfigurieren",
+        "description": "Geben Sie die Gerätedaten ein{for_device}.",
+        "data": {
+          "friendly_name": "Name",
+          "host": "IP-Adresse",
+          "device_id": "Geräte-ID",
+          "local_key": "Lokaler Schlüssel",
+          "protocol_version": "Protokollversion",
+          "enable_debug": "Debugging für dieses Gerät aktivieren (Debugging muss auch in configuration.yaml aktiviert sein)",
+          "scan_interval": "Abfrageintervall (Sekunden, nur wenn keine automatische Aktualisierung erfolgt)",
+          "entities": "Entitäten (zum Entfernen einer Entität das Häkchen entfernen)",
+          "add_entities": "Weitere Entitäten im Modus „Gerät bearbeiten“ hinzufügen",
+          "manual_dps_strings": "Manuell hinzuzufügende DPS (durch Kommas getrennt), falls die Erkennung nicht funktioniert (optional)",
+          "reset_dpids": "DPIDs für den RESET-Befehl (durch Kommas getrennt), falls das Gerät nach dem Einschalten nicht auf Statusabfragen reagiert (optional)",
+          "auto_configure_entities": "Bekannte Entitäten automatisch anhand der Tuya-Metadaten konfigurieren"
+        }
+      },
+      "pick_entity_type": {
+        "title": "Entitätstyp auswählen",
+        "description": "Wählen Sie den Typ der Entität aus, die Sie hinzufügen möchten.",
+        "data": {
+          "platform_to_add": "Plattform",
+          "no_additional_entities": "Keine weiteren Entitäten hinzufügen"
+        }
+      },
+      "configure_entity": {
+        "title": "Entität konfigurieren",
+        "description": "Geben Sie die Details für {entity} vom Typ `{platform}` ein. Alle Einstellungen außer `ID` können später unter Optionen geändert werden.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Anzeigename",
+          "current": "Strom",
+          "current_consumption": "Aktueller Verbrauch",
+          "voltage": "Spannung",
+          "commands_set": "Befehlssatz Öffnen_Schließen_Stopp",
+          "positioning_mode": "Positionierungsmodus",
+          "current_position_dp": "Aktuelle Position (nur Modus *Position*)",
+          "set_position_dp": "Position setzen (nur Modus *Position*)",
+          "position_inverted": "Position 0–100 umkehren (nur Modus *Position*)",
+          "span_time": "Vollständige Öffnungszeit in Sekunden (nur Modus *Zeitgesteuert*)",
+          "unit_of_measurement": "Maßeinheit",
+          "device_class": "Geräteklasse",
+          "scaling": "Skalierungsfaktor",
+          "state_on": "Ein-Wert",
+          "state_off": "Aus-Wert",
+          "powergo_dp": "Strom-DP (normalerweise 25 oder 2)",
+          "idle_status_value": "Leerlaufzustände (durch Kommas getrennt)",
+          "returning_status_value": "Rückkehrzustand",
+          "docked_status_value": "Zustände an der Ladestation (durch Kommas getrennt)",
+          "fault_dp": "Fehler-DP (normalerweise 11)",
+          "battery_dp": "Batteriestatus-DP (normalerweise 14)",
+          "mode_dp": "Modus-DP (normalerweise 27)",
+          "modes": "Modusliste",
+          "return_mode": "Rückkehrmodus",
+          "fan_speed_dp": "Lüftergeschwindigkeits-DP (normalerweise 30)",
+          "fan_speeds": "Liste der Lüftergeschwindigkeiten (durch Kommas getrennt)",
+          "clean_time_dp": "Reinigungszeit-DP (normalerweise 33)",
+          "clean_area_dp": "Reinigungsflächen-DP (normalerweise 32)",
+          "clean_record_dp": "Reinigungsverlauf-DP (normalerweise 34)",
+          "locate_dp": "Ortungs-DP (normalerweise 31)",
+          "paused_state": "Pausenzustand (pause, paused usw.)",
+          "stop_status": "Stoppzustand",
+          "brightness": "Helligkeit (nur Weiß)",
+          "brightness_lower": "Minimaler Helligkeitswert",
+          "brightness_upper": "Maximaler Helligkeitswert",
+          "color_temp": "Farbtemperatur",
+          "color_temp_reverse": "Farbtemperatur umkehren",
+          "color": "Farbe",
+          "color_mode": "Farbmodus",
+          "color_temp_min_kelvin": "Minimale Farbtemperatur in K",
+          "color_temp_max_kelvin": "Maximale Farbtemperatur in K",
+          "music_mode": "Musikmodus verfügbar",
+          "scene": "Szene",
+          "select_options": "Gültige Einträge, durch ; getrennt",
+          "select_options_friendly": "Lesbare Bezeichnungen, durch ; getrennt",
+          "fan_speed_control": "DP für Lüftergeschwindigkeit",
+          "fan_oscillating_control": "DP für Lüfteroszillation",
+          "fan_speed_min": "Minimale Lüftergeschwindigkeit",
+          "fan_speed_max": "Maximale Lüftergeschwindigkeit",
+          "fan_speed_ordered_list": "Geordnete Liste der Lüftergeschwindigkeiten (ersetzt Min./Max.)",
+          "fan_direction": "DP für Lüfterrichtung",
+          "fan_direction_forward": "DP-Wert für Vorwärtsrichtung",
+          "fan_direction_reverse": "DP-Wert für Rückwärtsrichtung",
+          "fan_dps_type": "DP-Werttyp",
+          "current_temperature_dp": "Aktuelle Temperatur",
+          "target_temperature_dp": "Zieltemperatur",
+          "temperature_step": "Temperaturschritt (optional)",
+          "max_temperature_dp": "DP für Maximaltemperatur (optional)",
+          "min_temperature_dp": "DP für Minimaltemperatur (optional)",
+          "max_temperature_const": "Konstante Maximaltemperatur (optional)",
+          "min_temperature_const": "Konstante Minimaltemperatur (optional)",
+          "precision": "Genauigkeit (optional, für DP-Werte)",
+          "target_precision": "Zielgenauigkeit (optional, für DP-Werte)",
+          "temperature_unit": "Temperatureinheit (optional)",
+          "hvac_mode_dp": "DP für HVAC-Modus (optional)",
+          "hvac_mode_set": "Werte für HVAC-Modus (optional)",
+          "hvac_fan_mode_dp": "DP für HVAC-Lüftermodus (optional)",
+          "hvac_fan_mode_set": "Werte für HVAC-Lüftermodus (optional)",
+          "hvac_swing_mode_dp": "DP für HVAC-Schwenkmodus (optional)",
+          "hvac_swing_mode_set": "Werte für HVAC-Schwenkmodus (optional)",
+          "hvac_action_dp": "DP für aktuelle HVAC-Aktion (optional)",
+          "hvac_action_set": "Werte für aktuelle HVAC-Aktion (optional)",
+          "preset_dp": "DP für Voreinstellungen (optional)",
+          "preset_set": "Liste der Voreinstellungen (optional)",
+          "eco_dp": "Eco-DP (optional)",
+          "eco_value": "Eco-Wert (optional)",
+          "heuristic_action": "Heuristische Aktionserkennung aktivieren (optional)",
+          "dps_default_value": "Standardwert vor Initialisierung (optional)",
+          "restore_on_reconnect": "Letzten in Home Assistant gesetzten Wert nach einer erneuten Verbindung wiederherstellen",
+          "min_value": "Minimalwert",
+          "max_value": "Maximalwert",
+          "step_size": "Minimale Schrittweite",
+          "is_passive_entity": "Passive Entität – die Integration muss einen Initialisierungswert senden"
+        }
+      },
+      "entity": {
+        "title": "Entitätskonfiguration",
+        "description": "Bearbeitung der Entität mit DP `{id}` und Plattform `{platform}`.",
+        "data": {
+          "id": "ID",
+          "friendly_name": "Anzeigename",
+          "current": "Strom",
+          "current_consumption": "Aktueller Verbrauch",
+          "voltage": "Spannung",
+          "commands_set": "Befehlssatz Öffnen_Schließen_Stopp",
+          "positioning_mode": "Positionierungsmodus",
+          "current_position_dp": "Aktuelle Position (nur Modus *Position*)",
+          "set_position_dp": "Position setzen (nur Modus *Position*)",
+          "position_inverted": "Position 0–100 umkehren (nur Modus *Position*)",
+          "span_time": "Vollständige Öffnungszeit in Sekunden (nur Modus *Zeitgesteuert*)",
+          "unit_of_measurement": "Maßeinheit",
+          "device_class": "Geräteklasse",
+          "scaling": "Skalierungsfaktor",
+          "state_on": "Ein-Wert",
+          "state_off": "Aus-Wert",
+          "powergo_dp": "Strom-DP (normalerweise 25 oder 2)",
+          "idle_status_value": "Leerlaufzustände (durch Kommas getrennt)",
+          "returning_status_value": "Rückkehrzustand",
+          "docked_status_value": "Zustände an der Ladestation (durch Kommas getrennt)",
+          "fault_dp": "Fehler-DP (normalerweise 11)",
+          "battery_dp": "Batteriestatus-DP (normalerweise 14)",
+          "mode_dp": "Modus-DP (normalerweise 27)",
+          "modes": "Modusliste",
+          "return_mode": "Rückkehrmodus",
+          "fan_speed_dp": "Lüftergeschwindigkeits-DP (normalerweise 30)",
+          "fan_speeds": "Liste der Lüftergeschwindigkeiten (durch Kommas getrennt)",
+          "clean_time_dp": "Reinigungszeit-DP (normalerweise 33)",
+          "clean_area_dp": "Reinigungsflächen-DP (normalerweise 32)",
+          "clean_record_dp": "Reinigungsverlauf-DP (normalerweise 34)",
+          "locate_dp": "Ortungs-DP (normalerweise 31)",
+          "paused_state": "Pausenzustand (pause, paused usw.)",
+          "stop_status": "Stoppzustand",
+          "brightness": "Helligkeit (nur Weiß)",
+          "brightness_lower": "Minimaler Helligkeitswert",
+          "brightness_upper": "Maximaler Helligkeitswert",
+          "color_temp": "Farbtemperatur",
+          "color_temp_reverse": "Farbtemperatur umkehren",
+          "color": "Farbe",
+          "color_mode": "Farbmodus",
+          "color_temp_min_kelvin": "Minimale Farbtemperatur in K",
+          "color_temp_max_kelvin": "Maximale Farbtemperatur in K",
+          "music_mode": "Musikmodus verfügbar",
+          "scene": "Szene",
+          "select_options": "Gültige Einträge, durch ; getrennt",
+          "select_options_friendly": "Lesbare Bezeichnungen, durch ; getrennt",
+          "fan_speed_control": "DP für Lüftergeschwindigkeit",
+          "fan_oscillating_control": "DP für Lüfteroszillation",
+          "fan_speed_min": "Minimale Lüftergeschwindigkeit",
+          "fan_speed_max": "Maximale Lüftergeschwindigkeit",
+          "fan_speed_ordered_list": "Geordnete Liste der Lüftergeschwindigkeiten (ersetzt Min./Max.)",
+          "fan_direction": "DP für Lüfterrichtung",
+          "fan_direction_forward": "DP-Wert für Vorwärtsrichtung",
+          "fan_direction_reverse": "DP-Wert für Rückwärtsrichtung",
+          "fan_dps_type": "DP-Werttyp",
+          "current_temperature_dp": "Aktuelle Temperatur",
+          "target_temperature_dp": "Zieltemperatur",
+          "temperature_step": "Temperaturschritt (optional)",
+          "max_temperature_dp": "DP für Maximaltemperatur (optional)",
+          "min_temperature_dp": "DP für Minimaltemperatur (optional)",
+          "max_temperature_const": "Konstante Maximaltemperatur (optional)",
+          "min_temperature_const": "Konstante Minimaltemperatur (optional)",
+          "precision": "Genauigkeit (optional, für DP-Werte)",
+          "target_precision": "Zielgenauigkeit (optional, für DP-Werte)",
+          "temperature_unit": "Temperatureinheit (optional)",
+          "hvac_mode_dp": "DP für HVAC-Modus (optional)",
+          "hvac_mode_set": "Werte für HVAC-Modus (optional)",
+          "hvac_fan_mode_dp": "DP für HVAC-Lüftermodus (optional)",
+          "hvac_fan_mode_set": "Werte für HVAC-Lüftermodus (optional)",
+          "hvac_swing_mode_dp": "DP für HVAC-Schwenkmodus (optional)",
+          "hvac_swing_mode_set": "Werte für HVAC-Schwenkmodus (optional)",
+          "hvac_action_dp": "DP für aktuelle HVAC-Aktion (optional)",
+          "hvac_action_set": "Werte für aktuelle HVAC-Aktion (optional)",
+          "preset_dp": "DP für Voreinstellungen (optional)",
+          "preset_set": "Liste der Voreinstellungen (optional)",
+          "eco_dp": "Eco-DP (optional)",
+          "eco_value": "Eco-Wert (optional)",
+          "heuristic_action": "Heuristische Aktionserkennung aktivieren (optional)",
+          "dps_default_value": "Standardwert vor Initialisierung (optional)",
+          "restore_on_reconnect": "Letzten in Home Assistant gesetzten Wert nach einer erneuten Verbindung wiederherstellen",
+          "min_value": "Minimalwert",
+          "max_value": "Maximalwert",
+          "step_size": "Minimale Schrittweite",
+          "is_passive_entity": "Passive Entität – die Integration muss einen Initialisierungswert senden"
+        }
+      }
+    }
+  },
+  "services": {
+    "reload": {
+      "name": "Neu laden",
+      "description": "LocalTuya Connect neu laden und alle Geräte erneut verbinden."
+    },
+    "set_dp": {
+      "name": "Datenpunkt setzen",
+      "description": "Wert eines Datenpunkts (DP) ändern.",
+      "fields": {
+        "device_id": {
+          "name": "Geräte-ID",
+          "description": "Geräte-ID des Geräts, dessen Datenpunktwert geändert werden soll."
+        },
+        "dp": {
+          "name": "DP",
+          "description": "Datenpunktindex"
+        },
+        "value": {
+          "name": "Wert",
+          "description": "Neuer einzustellender Wert."
+        }
+      }
+    }
+  },
+  "title": "LocalTuya Connect",
+  "entity": {
+    "sensor": {
+      "cur_current": {
+        "name": "Strom"
+      },
+      "cur_power": {
+        "name": "Leistung"
+      },
+      "cur_voltage": {
+        "name": "Spannung"
+      },
+      "add_ele": {
+        "name": "Energie"
+      }
+    },
+    "number": {
+      "countdown_1": {
+        "name": "Countdown"
+      }
+    },
+    "select": {
+      "relay_status": {
+        "name": "Einschaltzustand",
+        "state": {
+          "power_off": "Nach Stromausfall aus",
+          "power_on": "Nach Stromausfall ein",
+          "last": "Letzten Zustand wiederherstellen"
+        }
+      },
+      "light_mode": {
+        "name": "Anzeigemodus",
+        "state": {
+          "relay": "Relais folgen",
+          "pos": "Position",
+          "none": "Aus"
+        }
+      }
+    }
+  },
+  "selector": {
+    "localtuya_action": {
+      "options": {
+        "add_device": "Neues Gerät hinzufügen",
+        "edit_device": "Gerät bearbeiten",
+        "setup_cloud": "Cloud-Konto neu konfigurieren"
+      }
+    },
+    "protocol_version": {
+      "options": {
+        "auto": "Automatisch",
+        "3.1": "3.1",
+        "3.2": "3.2",
+        "3.3": "3.3",
+        "3.4": "3.4",
+        "3.5": "3.5"
+      }
+    },
+    "entity_platform": {
+      "options": {
+        "binary_sensor": "Binärsensor",
+        "climate": "Klima",
+        "cover": "Rollladen / Abdeckung",
+        "fan": "Ventilator",
+        "light": "Licht",
+        "number": "Zahl",
+        "select": "Auswahl",
+        "sensor": "Sensor",
+        "switch": "Schalter",
+        "vacuum": "Staubsauger"
+      }
+    }
+  }
+}
